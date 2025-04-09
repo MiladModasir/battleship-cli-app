@@ -31,7 +31,7 @@ function printBoard(board, debug) {
         } else if (cell.type === "large") {
           output[rowLabel].push("🔵");
         } else {
-          output[rowLabel].push("-");
+          output[rowLabel].push("❗");
         }
       } else {
         output[rowLabel].push("-");
@@ -108,7 +108,7 @@ function handleGuess(board) {
   while (true) {
     const guess = readLineSync.question("Enter your guess (e. g. A1):");
     const row = guess.charCodeAt(0) - 65; // 'A' -> 0
-    const col = parseInt(guess.slice(1)) - 1; // '1' -> 0
+    const col = parseInt(guess.slice(1)); // '1' -> 0
     if (row < 0 || row >= board.length || col < 0 || col >= board.length) {
       console.log("Invalid guess, try again");
     } else {
@@ -138,29 +138,33 @@ function hasWon(board) {
   }
   return true;
 }
-const size = greetingMenu();
-const board = createBorad(size);
-if (size === 4) placeShips(board, 1, 1);
-else if (size === 5) placeShips(board, 2, 1);
-else if (size === 6) placeShips(board, 2, 2);
-while (true) {
-  console.clear();
-  printBoard(board, false);
-  handleGuess(board);
-  if (hasWon(board)) {
+
+function main() {
+  const size = greetingMenu();
+  const board = createBorad(size);
+  if (size === 4) placeShips(board, 1, 1);
+  else if (size === 5) placeShips(board, 2, 1);
+  else if (size === 6) placeShips(board, 2, 2);
+  while (true) {
     console.clear();
-    printBoard(board, true);
-    console.log(`
-        YOU WON!
-        ========
-        __   _______ _   _   _    _ _____ _   _
-        \\ \\ / /  _  | | | | | |  | |_   _| \\ | |
-         \\ V /| | | | | | | | |  | | | | |  \\| |
-          \\ / | | | | | | | | |/\\| | | | | . \` |
-          | | \\ \\_/ / |_| | \\  /\\  /_| |_| |\\  |
-          \\_/  \\___/ \\___/   \\/  \\/ \\___/\\_| \\_/
-        ========
-        `);
-    break;
+    printBoard(board, false);
+    handleGuess(board);
+    if (hasWon(board)) {
+      console.clear();
+      printBoard(board, true);
+      console.log(`
+          YOU WON!
+          ========
+          __   _______ _   _   _    _ _____ _   _
+          \\ \\ / /  _  | | | | | |  | |_   _| \\ | |
+           \\ V /| | | | | | | | |  | | | | |  \\| |
+            \\ / | | | | | | | | |/\\| | | | | . \` |
+            | | \\ \\_/ / |_| | \\  /\\  /_| |_| |\\  |
+            \\_/  \\___/ \\___/   \\/  \\/ \\___/\\_| \\_/
+          ========
+          `);
+      break;
+    }
   }
 }
+main();
